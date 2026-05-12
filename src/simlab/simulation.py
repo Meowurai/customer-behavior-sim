@@ -2,7 +2,7 @@
 
 from datetime import date, timedelta
 
-from simlab import Clock
+from simlab.clock import Clock
 
 
 class Simulation:
