@@ -4,7 +4,7 @@ A small Python simulation experiment for learning how customer behavior can chan
 The goal is to build a tiny customer world where customers have simple traits and changing behavior.
 
 - customers
-- monthly ticks
+- daily ticks
 - usage score
 - satisfaction score
 - random variation
