@@ -1,0 +1,14 @@
+[project]
+name = "customer-behavior-sim"
+description = "A small Python simulation experiment for learning how customer behavior can change over time."
+version = "0.1.0"
+
+authors = [
+  {name = "Caj Michael Andersson", email = "caj.m.andersoson@gmail.com"},
+]
+
+dependencies = []
+
+
+[project.scripts]
+simulate = "simlab.main:main"
