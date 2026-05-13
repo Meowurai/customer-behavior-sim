@@ -48,6 +48,15 @@ class IdentifierRegistry:
             raise ValueError("Couldnt create id for namespace {namespace}")
         
         return identifier.new_id()
+    
+    def has_identifier(self, namespace: str) -> bool:
+        if namespace in self.registry:
+            return True
+        else:
+            return False
+        
+
+identifier_registry = IdentifierRegistry()
         
 
         
