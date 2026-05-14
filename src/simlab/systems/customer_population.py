@@ -20,13 +20,6 @@ class CustomerPopulationSystem(System):
                 event = self.create_event(context, customer)
                 events.append(event)
 
-
-        state_customers = state.entity_data.get("customers")
-        if  state_customers is not None and len(state_customers) < 7: 
-            customer = self.create_customer(context)
-            event = self.create_event(context, customer)
-            events.append(event)
-
         return events
     
     def create_event(self, context: TickContext, customer: Customer) -> Event:
@@ -42,9 +35,9 @@ class CustomerPopulationSystem(System):
     def create_customer(self, context: TickContext) -> Customer:
         customer_id = self.identifier.new_id()
 
-        # For now just init with random numbers
-        usage_score = context.rng.random()
-        satisfaction_score = context.rng.random()
+        # For now just init with 0.5 to check usage recording feedback loop
+        usage_score = 0.5
+        satisfaction_score = 0.5
 
         customer = Customer(
             customer_id,

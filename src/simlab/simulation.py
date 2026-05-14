@@ -8,7 +8,11 @@ from simlab.ids import identifier_registry
 from simlab.context import TickContext
 from simlab.state import WorldState
 from simlab.systems import System, Event
-from simlab.reducers import reduce_event_stats, reduce_customer_created
+from simlab.reducers import (
+                                reduce_event_stats, 
+                                reduce_customer_created,
+                                reduce_usage_recorded
+                            )
 
 
 class Simulation:
@@ -55,14 +59,14 @@ class Simulation:
             for event in events:
                 # Global reducers
                 reduce_event_stats(event, self.world_state)
-
+               
                 # event type reducers:
                 # simple match statement is fine for now.
                 match event.event_type:
                     case 'CustomerCreated':
                         reduce_customer_created(event, self.world_state)
                     case 'UsageRecorded':
-                        ...
+                        reduce_usage_recorded(event, self.world_state)
 
                     case _: 
                         print(f"Found event type with no reducer: {event.event_type}")
@@ -86,16 +90,25 @@ class Simulation:
                     daily_usage = event.payload["usage_record"].usage
                     print(f"\n{' ' * 2} Daily Usage: {daily_usage}\n")
 
+            print("\nWorld State:")
+            customers  = self.world_state.entity_data.get('customers')
+            if customers is not None:
+                for customer in customers:
+                    print(f"\n{' ' * 2} Customer: {customer.customer_id}")
+                    print(f"{' ' * 2} Usage Score: {customer.usage_score}")
+
 
             # Advance time
             clock.advance()
 
         # Summarize simulation report
-        print("Summary:\n")
-        print(f"\nTotal processed events: {self.world_state.count_total_processed_events}")
+        print("\n\nSummary:")
+        print(f"Total processed events: {self.world_state.count_total_processed_events}")
         for event_type, count in self.world_state.count_event_types_events.items():
             print(f"{event_type}: {count}")
 
-        print("\nEntity records created:\n")
+        print("\nEntity records created:")
         for entity, records in self.world_state.entity_data.items():
             print(f"{entity}: {len(records)}")
+
+        print()
