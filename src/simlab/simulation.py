@@ -8,6 +8,7 @@ from simlab.ids import identifier_registry
 from simlab.context import TickContext
 from simlab.state import WorldState
 from simlab.systems import System, Event
+from simlab.reducers import reduce_event_stats
 
 
 class Simulation:
@@ -49,8 +50,15 @@ class Simulation:
             for system in self.systems:
                 system_events = system.emit(context, self.world_state)
                 events.extend(system_events)
+
+            # Reduce events to state
+            for event in events:
+                # Global reducers
+                reduce_event_stats(event, self.world_state)
+
+
             
-            
+            # Summarize tick
             print(f"\nTick {clock.current_tick()} | {clock.current_date()}\n")
 
             for event in events:
@@ -69,4 +77,15 @@ class Simulation:
                     print(f"\n{' ' * 2} Daily Usage: {daily_usage}\n")
 
 
+            # Advance time
             clock.advance()
+
+        # Summarize simulation report
+        print("Summary:\n")
+        print(f"\nTotal processed events: {self.world_state.count_total_processed_events}")
+        for event_type, count in self.world_state.count_event_types_events.items():
+            print(f"{event_type}: {count}")
+
+        print("\nEntity records created:\n")
+        for entity, records in self.world_state.entity_data.items():
+            print(f"{entity}: {len(records)}")
