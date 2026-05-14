@@ -13,22 +13,32 @@ class UsageRecordSystem(System):
         self.identifier = identifier_registry.register_identifier('usage')
 
     def emit(self, context: TickContext, state: WorldState) -> list[Event]:
+        events: list[Event] = []
+        customers = state.entity_data.get('customers')
+         
+        if customers is not None:
+            for customer in customers:
+                usage_id = self.identifier.new_id()
+                usage_record = UsageRecord(
+                    usage_id=usage_id, 
+                    customer_id=customer.customer_id,
+                    date=context.date,
+                    usage=context.rng.random()
+                )
 
-        usage_id = self.identifier.new_id()
-        usage_record = UsageRecord(
-            usage_id=usage_id, 
-            usage=context.rng.random()
-        )
+                event = Event(
+                    event_id=identifier_registry.new_id('event'),
+                    event_type="UsageRecorded",
+                    system_name=self.name,
+                    payload={
+                        "usage_record": usage_record
+                    },
+                    tick=context.tick,
+                    date=context.date
+                )
 
-        event = Event(
-            event_id=identifier_registry.new_id('event'),
-            event_type="UsageRecorded",
-            system_name=self.name,
-            payload={
-                "usage_record": usage_record
-            },
-            tick=context.tick,
-            date=context.date
-        )
+                events.append(event)
 
-        return [event]
+
+
+        return events
