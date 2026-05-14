@@ -15,7 +15,7 @@ def main():
     simulation = Simulation(
         systems=[customer_population, usage_recording],
         start_date=date(2026, 1, 1),
-        ticks=3,
+        ticks=5,
         delta=timedelta(days=1),
         seed=42
     )
