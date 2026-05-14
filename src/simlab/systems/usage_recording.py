@@ -2,6 +2,7 @@
 
 from simlab.systems import System, Event
 from simlab.context import TickContext
+from simlab.state import WorldState
 from simlab.entities import UsageRecord
 from simlab.ids import identifier_registry
 
@@ -11,7 +12,7 @@ class UsageRecordSystem(System):
 
         self.identifier = identifier_registry.register_identifier('usage')
 
-    def emit(self, context: TickContext) -> list[Event]:
+    def emit(self, context: TickContext, state: WorldState) -> list[Event]:
 
         usage_id = self.identifier.new_id()
         usage_record = UsageRecord(

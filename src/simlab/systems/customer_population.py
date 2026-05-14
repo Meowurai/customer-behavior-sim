@@ -3,6 +3,7 @@
 from simlab.systems import System, Event
 from simlab.entities import Customer
 from simlab.context import TickContext
+from simlab.state import WorldState
 from simlab.ids import identifier_registry
 
 class CustomerPopulationSystem(System):
@@ -11,7 +12,7 @@ class CustomerPopulationSystem(System):
 
         self.identifier = identifier_registry.register_identifier('customer')
 
-    def emit(self, context: TickContext) -> list[Event]:
+    def emit(self, context: TickContext, state: WorldState) -> list[Event]:
         events: list[Event] = []
         if context.tick == 1:
             
