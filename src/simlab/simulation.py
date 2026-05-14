@@ -52,7 +52,7 @@ class Simulation:
 
             for event in events:
                 print(event.event_type)
-                if event.payload["customer"]:
+                if event.payload.get("customer"):
                     customer_id = event.payload["customer"].customer_id
                     usage_score = event.payload["customer"].usage_score
                     satisfaction_score = event.payload["customer"].satisfaction_score
@@ -60,6 +60,10 @@ class Simulation:
                     print(f"\n{' ' * 2} Customer: {customer_id}")
                     print(f"{' ' * 2} Usage Score: {usage_score}")
                     print(f"{' ' * 2} Satisfaction Score: {satisfaction_score}\n")
+
+                if event.payload.get("usage_record"):
+                    daily_usage = event.payload["usage_record"].usage
+                    print(f"\n{' ' * 2} Daily Usage: {daily_usage}\n")
 
 
             clock.advance()
