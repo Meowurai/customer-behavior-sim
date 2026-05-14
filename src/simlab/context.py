@@ -1,10 +1,10 @@
 # src/simlab/context.py
 
 from datetime import date
-
-from simlab.ids import IdentifierRegistry
+from random import Random
 
 class TickContext:
-    def __init__(self, tick: int, date: date):
+    def __init__(self, tick: int, date: date, rng: Random):
         self.tick = tick 
         self.date = date 
+        self.rng = rng
