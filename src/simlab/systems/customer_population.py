@@ -16,7 +16,17 @@ class CustomerPopulationSystem(System):
         if context.tick == 1:
             
             for _ in range (5):
-                customer = Customer(self.identifier)
+                customer_id = self.identifier.new_id()
+
+                # For now just init as 0.5
+                usage_score = context.rng.uniform(0.5, 0.9)
+                satisfaction_score = 0.5
+
+                customer = Customer(
+                    customer_id,
+                    usage_score,
+                    satisfaction_score
+                    )
                 event = Event(
                     event_id=identifier_registry.new_id('event'),
                     event_type='CustomerCreated',

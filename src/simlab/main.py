@@ -12,8 +12,9 @@ def main():
     simulation = Simulation(
         systems=[customer_population],
         start_date=date(2026, 1, 1),
-        ticks=10,
-        delta=timedelta(days=1)
+        ticks=3,
+        delta=timedelta(days=1),
+        seed=42
     )
 
     simulation.run()
