@@ -26,6 +26,10 @@ class Simulation:
         seed: int = 42
         
     ) -> None:
+        
+        if ticks <= 0:
+            raise ValueError(f"Ticks must be greater than 0: {ticks}")
+
         self.systems = systems
         self.start_date = start_date
         self.ticks = ticks
