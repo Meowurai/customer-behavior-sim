@@ -35,12 +35,13 @@ class CustomerPopulationSystem(System):
     def create_customer(self, context: TickContext) -> Customer:
         customer_id = self.identifier.new_id()
 
-        # For now just init with 0.5 to check usage recording feedback loop
-        usage_score = 0.5
-        satisfaction_score = 0.5
+        product_fit = context.rng.uniform(0.2, 0.9)
+        usage_score = 0.0           # No usage has occurred yet
+        satisfaction_score = 0.5    # Neutral satisfaction
 
         customer = Customer(
             customer_id,
+            product_fit,
             usage_score,
             satisfaction_score
         )
