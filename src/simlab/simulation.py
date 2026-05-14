@@ -3,6 +3,7 @@
 from datetime import date, timedelta
 from random import Random
 
+from simlab.report import tick_report, simulation_summary, SectionConfig, ReportConfig
 from simlab.clock import Clock
 from simlab.ids import identifier_registry
 from simlab.context import TickContext
@@ -61,7 +62,6 @@ class Simulation:
                 reduce_event_stats(event, self.world_state)
                
                 # event type reducers:
-                # simple match statement is fine for now.
                 match event.event_type:
                     case 'CustomerCreated':
                         reduce_customer_created(event, self.world_state)
@@ -73,42 +73,24 @@ class Simulation:
 
             
             # Summarize tick
-            print(f"\n> Tick {clock.current_tick()} | {clock.current_date()}\n")
+            config = ReportConfig(
+                events=SectionConfig(max_depth=4, max_items=3),
+                state=SectionConfig(max_depth=4, max_items=5),
+            )
 
-            for event in events:
-                print(event.event_type)
-                if event.payload.get("customer"):
-                    customer_id = event.payload["customer"].customer_id
-                    usage_score = event.payload["customer"].usage_score
-                    satisfaction_score = event.payload["customer"].satisfaction_score
-
-                    print(f"\n{' ' * 2} Customer: {customer_id}")
-                    print(f"{' ' * 2} Usage Score: {usage_score}")
-                    print(f"{' ' * 2} Satisfaction Score: {satisfaction_score}\n")
-
-                if event.payload.get("usage_record"):
-                    daily_usage = event.payload["usage_record"].usage
-                    print(f"\n{' ' * 2} Daily Usage: {daily_usage}\n")
-
-            print("\nWorld State:")
-            customers  = self.world_state.entity_data.get('customers')
-            if customers is not None:
-                for customer in customers:
-                    print(f"\n{' ' * 2} Customer: {customer.customer_id}")
-                    print(f"{' ' * 2} Usage Score: {customer.usage_score}")
+            tick_report(
+                clock=clock,
+                events=events,
+                state=self.world_state,
+                config=config
+            )
 
 
             # Advance time
             clock.advance()
 
         # Summarize simulation report
-        print("\n\nSummary:")
-        print(f"Total processed events: {self.world_state.count_total_processed_events}")
-        for event_type, count in self.world_state.count_event_types_events.items():
-            print(f"{event_type}: {count}")
-
-        print("\nEntity records created:")
-        for entity, records in self.world_state.entity_data.items():
-            print(f"{entity}: {len(records)}")
+        simulation_summary(self.world_state, SectionConfig(max_depth=2))
 
         print()
+
