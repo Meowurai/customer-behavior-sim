@@ -8,7 +8,7 @@ from simlab.ids import identifier_registry
 from simlab.context import TickContext
 from simlab.state import WorldState
 from simlab.systems import System, Event
-from simlab.reducers import reduce_event_stats
+from simlab.reducers import reduce_event_stats, reduce_customer_created
 
 
 class Simulation:
@@ -56,10 +56,20 @@ class Simulation:
                 # Global reducers
                 reduce_event_stats(event, self.world_state)
 
+                # event type reducers:
+                # simple match statement is fine for now.
+                match event.event_type:
+                    case 'CustomerCreated':
+                        reduce_customer_created(event, self.world_state)
+                    case 'UsageRecorded':
+                        ...
+
+                    case _: 
+                        print(f"Found event type with no reducer: {event.event_type}")
 
             
             # Summarize tick
-            print(f"\nTick {clock.current_tick()} | {clock.current_date()}\n")
+            print(f"\n> Tick {clock.current_tick()} | {clock.current_date()}\n")
 
             for event in events:
                 print(event.event_type)

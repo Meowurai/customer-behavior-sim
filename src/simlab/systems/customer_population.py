@@ -15,20 +15,22 @@ class CustomerPopulationSystem(System):
     def emit(self, context: TickContext, state: WorldState) -> list[Event]:
         events: list[Event] = []
         if context.tick == 1:
-            
             for _ in range (5):
-                customer_id = self.identifier.new_id()
+                customer = self.create_customer(context)
+                event = self.create_event(context, customer)
+                events.append(event)
 
-                # For now just init as 0.5
-                usage_score = context.rng.uniform(0.5, 0.9)
-                satisfaction_score = 0.5
 
-                customer = Customer(
-                    customer_id,
-                    usage_score,
-                    satisfaction_score
-                    )
-                event = Event(
+        state_customers = state.entity_data.get("customers")
+        if  state_customers is not None and len(state_customers) < 7: 
+            customer = self.create_customer(context)
+            event = self.create_event(context, customer)
+            events.append(event)
+
+        return events
+    
+    def create_event(self, context: TickContext, customer: Customer) -> Event:
+        return Event(
                     event_id=identifier_registry.new_id('event'),
                     event_type='CustomerCreated',
                     system_name=self.name,
@@ -36,6 +38,18 @@ class CustomerPopulationSystem(System):
                     tick=context.tick,
                     date=context.date
                 )
-                events.append(event)
+    
+    def create_customer(self, context: TickContext) -> Customer:
+        customer_id = self.identifier.new_id()
 
-        return events
+        # For now just init with random numbers
+        usage_score = context.rng.random()
+        satisfaction_score = context.rng.random()
+
+        customer = Customer(
+            customer_id,
+            usage_score,
+            satisfaction_score
+        )
+
+        return customer
