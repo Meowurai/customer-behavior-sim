@@ -2,6 +2,8 @@
 
 from datetime import date 
 
+from simlab.ids import identifier_registry
+
 
 class Event:
     def __init__(
