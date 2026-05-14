@@ -12,7 +12,7 @@ The goal is to build a tiny customer world where customers have simple traits an
 - a simple report of what happened
 
 
-## Planned loop 
+## Implemented loop
 ```text
 customers
 → simulation loop
@@ -21,16 +21,16 @@ customers
 → simple report
 ```
 
-## Done when
-- create a small set of customers
-- simulate 90 days
-- update usage and satisfaction
-- log events for each day
-- print a short summary of what happened
-
 ## To run 
 ```bash
 pip install -e .
 simulate
 ```
+
+- creates a small set of customers
+- simulate 90 days
+- updates usage and satisfaction
+- log events for each day
+- print a short summary of what happened
+
 
