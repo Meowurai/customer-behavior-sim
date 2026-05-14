@@ -23,8 +23,8 @@ customers
 
 ## Done when
 - create a small set of customers
-- simulate 12 months 
+- simulate 90 days
 - update usage and satisfaction
-- log events for each month
+- log events for each day
 - print a short summary of what happened
 
