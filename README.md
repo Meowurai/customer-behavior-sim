@@ -28,3 +28,9 @@ customers
 - log events for each day
 - print a short summary of what happened
 
+## To run 
+```bash
+pip install -e .
+simulate
+```
+
