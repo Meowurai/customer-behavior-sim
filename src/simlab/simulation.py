@@ -74,8 +74,8 @@ class Simulation:
             
             # Summarize tick
             config = ReportConfig(
-                events=SectionConfig(max_depth=4, max_items=3),
-                state=SectionConfig(max_depth=4, max_items=5),
+                events=SectionConfig(max_depth=4, max_items=2),
+                state=SectionConfig(max_depth=4, max_items=2),
             )
 
             tick_report(
